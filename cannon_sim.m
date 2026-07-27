@@ -23,9 +23,7 @@ dt = 0.01;
 
 %% animation
 while y >= 0
-    vy = vy - g*dt;
-    x = x + vx*dt;  %% euler approximation, not real kinematics equation
-    y = y + vy*dt;  %% euler approximation, not real kinematics equation
+    [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g)
 
     set(ballPlot, 'XData', x, 'YData', y);
     drawnow;
