@@ -15,21 +15,34 @@ function cannon_sim
 
     angleSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 90, 'Value', 45, 'Position', [250 40 150 20]);
     
-    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, velSlider, angSlider));
+    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider));
+    
+    %%fire cannon
+    function fireCannon(ax, ballPlot, velSlider, angSlider)
+        v0 = get(velSlider, 'Value');
+        angle = get(angSlider, 'Value');
+        g = 9.81;
+        x = 0; 
+        y = 0;
+        vx = v0 .* cosd(angle);
+        vy = v0 .* sind(angle);
+        dt = 0.02;
+
+        %% animation
+        while y >= 0
+            [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g)
+
+            set(ballPlot, 'XData', x, 'YData', y);
+            drawnow;
+
+        end 
+
+    end
     
     
-    %% animation
-    while y >= 0
-        [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g)
-    
-        set(ballPlot, 'XData', x, 'YData', y);
-        drawnow;
-    
-    end 
     
     
     
-    %% sliders
     
 end    
     
