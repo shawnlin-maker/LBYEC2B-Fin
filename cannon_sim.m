@@ -44,8 +44,8 @@ function cannon_sim
 
     %% live readout of values
     function live_display(vx, vy, vxText, vyText)
-        set(vxText, 'String', sprintf('Vx: 0.2f m/s', vx)); %% top right corner
-        set(vyText, 'String', sprintf('Vy: 0.2f m/s', vy)); %%top right corner
+        set(vxText, 'String', sprintf('Vx: %0.2f m/s', vx)); %% top right corner
+        set(vyText, 'String', sprintf('Vy: %0.2f m/s', vy)); %%top right corner
 
     end
 
