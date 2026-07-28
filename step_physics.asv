@@ -1,26 +1,26 @@
 
 
-function [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass)
-    speed = sqrt(vx^2 + vy^2);
+function [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g, useDrag)
+    s = sqrt(vx^2 + vy^2);
 
-    if space == 1
+    if useDrag == 1
         ax = 0;
         ay = -g;
     
-    elseif space == 2
+    elseif useDrag == 2
         rho = 1.225;
         A = 0.05;
 
         decel = 0.5*rho * Cd * A * speed / mass;
 
         ax = -decel * vx;
-        ay = -decel * vy -g;
+        ay = -decel * vy - g;
 
     end
 
 
     vx = vx + ax*dt
-    vy = vy + ay*dt;
+    vy = vy - g*dt;
     x = x + vx*dt; %% euler approximation, not real kinematics equation
     y = y + vy*dt; %% euler approximation, not real kinematics equation
 end

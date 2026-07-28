@@ -33,11 +33,13 @@ function cannon_sim
 
     angleSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 90, 'Value', 45, 'Position', [250 40 150 20], 'Callback', @(src,evt) cannonAngle(src, cannonPlot, cannonLen, pivot));
 
-    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider));
+    spaceMenu = uicontrol('Style', 'popupmenu', 'String', {'Vacuum', 'Earth (realistic)'}, 'Position', [600 70 100 20]);
+
+    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider, spaceMenu));
 
     matMenu = uicontrol('Style', 'popupmenu', 'String', {'Steel', 'Rubber', 'Wood'}, 'Position', [600 40 100 20]);
 
-    spaceMenu = uicontrol('Style', 'pushbutton')
+    
 
 
     %% cannon barrel angle
@@ -57,7 +59,7 @@ function cannon_sim
 
 
         %% fire cannon
-    function fireCannon(ax, ballPlot, velSlider, angSlider)
+    function fireCannon(ax, ballPlot, velSlider, angSlider, spaceMenu)
             v0 = get(velSlider, 'Value');
             angle = get(angSlider, 'Value');
             g = 9.81;
@@ -66,13 +68,17 @@ function cannon_sim
             vx = v0 .* cosd(angle);
             vy = v0 .* sind(angle);
             dt = 0.02;
+            Cd = 
+            
 
+            space = get(spaceMenu, 'Value');
 
             %% animation
             while y >= 0
                 
                 
-                [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g)
+                [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass)
+
                 set(ballPlot, 'XData', x, 'YData', y);
                 
                 addpoints(tracerPlot, x, y);
@@ -80,7 +86,6 @@ function cannon_sim
                 frameCount = frameCount + 1 
 
                 live_display(vx,vy, vxText, vyText)
-
 
                 if mod(frameCount, 50) == 0
                     quiver(ax,x,y,vx*0.5,vy*0.5, 'color',[0 0.4 1],'MaxHeadSize', 1);
