@@ -28,6 +28,13 @@ function cannon_sim
     %% path arrow
     frameCount = 0;
 
+     %% material presets -- Cd, mass, restitution (bounciness, 0=no bounce, 1=full bounce)
+    materials = struct( ...
+        'Steel', struct('Cd', 0.1, 'mass', 5,   'restitution', 0.2), ...
+        'Rubber',struct('Cd', 0.4, 'mass', 0.5, 'restitution', 0.8), ...
+        'Wood',  struct('Cd', 0.3, 'mass', 1.5, 'restitution', 0.4));
+    matNames = {'Steel', 'Rubber', 'Wood'}; %% order has to match matMenu's String order below
+
     %% sliders/menu
     vSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 60, 'Value', 30, 'Position', [50 40 150 20]);
 
@@ -59,25 +66,31 @@ function cannon_sim
 
 
         %% fire cannon
-    function fireCannon(ax, ballPlot, velSlider, angSlider, spaceMenu)
+    function fireCannon(ax, ballPlot, velSlider, angSlider, spaceMenu, matMenu, materials, matNames)
             v0 = get(velSlider, 'Value');
             angle = get(angSlider, 'Value');
             g = 9.81;
-            x = 0;
-            y = 0;
+            dt = 0.02;
+
+            %% ball spawns at the barrel tip, not (0,0) -- same math as the barrel line
+            x = pivot(1) + cannonLen*cosd(angle);
+            y = pivot(2) + cannonLen*sind(angle);
             vx = v0 .* cosd(angle);
             vy = v0 .* sind(angle);
-            dt = 0.02;
-            Cd = 0.47
-            mass = 5
 
+            %% read the dropdowns AT FIRE TIME, not before
             space = get(spaceMenu, 'Value');
+            matChoice = get(matMenu, 'Value');
+            chosenMat = materials.(matNames{matChoice});
+            Cd = chosenMat.Cd;
+            mass = chosenMat.mass;
+            restitution = chosenMat.restitution;
 
             %% animation
-            while y >= 0
+            while true
                 
                 
-                [x, y, vx, vy] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass)
+                [x, y, vx, vy, bounced] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass)
 
                 set(ballPlot, 'XData', x, 'YData', y);
                 
@@ -87,6 +100,13 @@ function cannon_sim
 
                 live_display(vx,vy, vxText, vyText)
 
+                %% squash-lite feedback on bounce frames
+                if bounced
+                    set(ballPlot, 'MarkerSize', 7);
+                    drawnow;
+                    set(ballPlot, 'MarkerSize', 14);
+                end
+
                 if mod(frameCount, 50) == 0
                     quiver(ax,x,y,vx*0.5,vy*0.5, 'color',[0 0.4 1],'MaxHeadSize', 1);
 
@@ -94,6 +114,14 @@ function cannon_sim
                     
 
                 drawnow;
+
+                %% stop conditions -- either flies off the right edge, or basically stopped bouncing
+                if x > 195
+                    break
+                end
+                if bounced && abs(vy) < 0.5
+                    break
+                end
 
                 
 
