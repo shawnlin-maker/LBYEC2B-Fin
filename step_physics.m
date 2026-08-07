@@ -2,6 +2,7 @@
 
 function [x, y, vx, vy, bounced] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass, restitution)
     speed = sqrt(vx^2 + vy^2);
+    bounced = false; 
 
     if space == 1
         %% vacuum no drag

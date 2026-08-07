@@ -42,7 +42,7 @@ function cannon_sim
 
     spaceMenu = uicontrol('Style', 'popupmenu', 'String', {'Vacuum', 'Earth (realistic)'}, 'Position', [600 70 100 20]);
 
-    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider, spaceMenu));
+    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider, spaceMenu, matMenu, materials, matNames));
 
     matMenu = uicontrol('Style', 'popupmenu', 'String', {'Steel', 'Rubber', 'Wood'}, 'Position', [600 40 100 20]);
 
