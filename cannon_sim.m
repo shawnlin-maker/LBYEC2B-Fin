@@ -1,4 +1,4 @@
-%% Layer 0 + Layer 1: figure/axes + bare animation loop
+
 function cannon_sim
     %% plotting window/canvas
     fig = figure;
