@@ -36,9 +36,11 @@ function cannon_sim
     matNames = {'Steel', 'Rubber', 'Wood'}; %% order has to match matMenu's string order below
 
     %% sliders/menu
-    vSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 60, 'Value', 30, 'Position', [50 40 150 20], 'Callback', @(src,evt) sliderReadout(sliderText, vSlider, angleSlider));
+    vSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 40, 'Value', 20, 'Position', [50 40 150 20]);
+    angleSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 90, 'Value', 45, 'Position', [250 40 150 20]);
 
-    angleSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 90, 'Value', 45, 'Position', [250 40 150 20], 'Callback', @(src,evt) angleChanged(src, cannonPlot, cannonLen, pivot, sliderText, vSlider, angleSlider));
+    set(vSlider, 'Callback', @(src,evt) sliderReadout(sliderText, vSlider, angleSlider));
+    set(angleSlider, 'Callback', @(src,evt) angleChanged(angleSlider, cannonPlot, cannonLen, pivot, sliderText, vSlider, angleSlider));
 
     spaceMenu = uicontrol('Style', 'popupmenu', 'String', {'Vacuum', 'Earth (realistic)'}, 'Position', [600 70 100 20]);
 
