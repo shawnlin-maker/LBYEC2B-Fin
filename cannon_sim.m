@@ -37,9 +37,16 @@ function cannon_sim
 
     %% sliders/menu
     vSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 40, 'Value', 20, 'Position', [50 40 150 20]);
+    
     angleSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 90, 'Value', 45, 'Position', [250 40 150 20]);
 
+    %% slider labels
+    uicontrol('Parent', fig, 'Style', 'text', 'String', 'Initial Velocity (m/s)', 'Position', [50 15 150 20], 'FontSize', 10, 'FontWeight', 'bold', 'BackgroundColor', [1 1 1], 'ForegroundColor', [0.1 0.1 0.3]);
+
+    uicontrol('Parent', fig, 'Style', 'text', 'String', 'Launch Angle (degrees)', 'Position', [250 15 150 20], 'FontSize', 10, 'FontWeight', 'bold', 'BackgroundColor', [1 1 1], 'ForegroundColor', [0.1 0.1 0.3]);
+    
     set(vSlider, 'Callback', @(src,evt) sliderReadout(sliderText, vSlider, angleSlider));
+
     set(angleSlider, 'Callback', @(src,evt) angleChanged(angleSlider, cannonPlot, cannonLen, pivot, sliderText, vSlider, angleSlider));
 
     spaceMenu = uicontrol('Style', 'popupmenu', 'String', {'Vacuum', 'Earth (realistic)'}, 'Position', [600 70 100 20]);
