@@ -25,6 +25,7 @@ function cannon_sim
 
     %% path arrow
     frameCount = 0;
+    extraHandles = gobjects(0);
 
     %% material presets; Cd, mass, restitution (bounciness), and color
     steel.Cd = 0.1; steel.mass = 5; steel.restitution = 0.2; steel.color = [0.5 0.5 0.5];
@@ -53,7 +54,11 @@ function cannon_sim
 
     matMenu = uicontrol('Style', 'popupmenu', 'String', {'Steel', 'Rubber', 'Wood'}, 'Position', [600 40 100 20]);
 
-    uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider, spaceMenu, matMenu, materials, matNames, statsText));
+    fireBtn = uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30]);
+    
+    set(fireBtn, 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider, spaceMenu, matMenu, materials, matNames, statsText, fireBtn));
+
+    uicontrol('Style', 'pushbutton', 'String', 'Reset', 'Position', [700 40 80 30], 'Callback', @(src,evt) resetSim());
 
 
     %% cannon barrel angle 
@@ -74,10 +79,17 @@ function cannon_sim
     function live_display(vx, vy, statsText)
         set(statsText, 'String', sprintf('Vx: %0.2f m/s\nVy: %0.2f m/s', vx, vy));
     end
+    
+    % to reset
+    function resetSim()
+        delete(extraHandles);
+        extraHandles = [];
+    end
 
 
     %% fire cannon
-    function fireCannon(ax, ballPlot, velSlider, angSlider, spaceMenu, matMenu, materials, matNames, statsText)
+    function fireCannon(ax, ballPlot, velSlider, angSlider, spaceMenu, matMenu, materials, matNames, statsText, fireBtn)
+        set(fireBtn, 'Enable', 'off');
         v0 = get(velSlider, 'Value');
         angle = get(angSlider, 'Value');
         g = 9.81;
@@ -99,6 +111,7 @@ function cannon_sim
 
         %% trail every shot
         tracerPlot = animatedline(ax, 'Color', matColor, 'LineWidth', 2);
+        extraHandles(end+1) = tracerPlot;
         set(ballPlot, 'MarkerFaceColor', matColor);
 
         %% animation
@@ -122,7 +135,8 @@ function cannon_sim
             end
 
             if mod(frameCount, 50) == 0
-                quiver(ax,x,y,vx*0.5,vy*0.5, 'Color', matColor, 'MaxHeadSize', 1);
+                arrowH = quiver(ax,x,y,vx*0.5,vy*0.5, 'Color', matColor, 'MaxHeadSize', 1);
+                extraHandles(end+1) = arrowH;
             end
 
             drawnow;
@@ -136,5 +150,6 @@ function cannon_sim
             end
 
         end
+        set(fireBtn, 'Enable','on');
     end
 end
