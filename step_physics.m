@@ -22,7 +22,7 @@ function [x, y, vx, vy, bounced] = step_physics(x, y, vx, vy, dt, g, space, Cd, 
     end
 
 
-    vx = vx + ax*dt
+    vx = vx + ax*dt;
     vy = vy + ay*dt;
     x = x + vx*dt; %% euler approximation, not real kinematics equation
     y = y + vy*dt; %% euler approximation, not real kinematics equation
