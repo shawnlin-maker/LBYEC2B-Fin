@@ -33,7 +33,7 @@ function cannon_sim
         'Steel', struct('Cd', 0.1, 'mass', 5,   'restitution', 0.2), ...
         'Rubber',struct('Cd', 0.4, 'mass', 0.5, 'restitution', 0.8), ...
         'Wood',  struct('Cd', 0.3, 'mass', 1.5, 'restitution', 0.4));
-    matNames = {'Steel', 'Rubber', 'Wood'}; %% order has to match matMenu's String order below
+    matNames = {'Steel', 'Rubber', 'Wood'}; %% order has to match matMenu's string order below
 
     %% sliders/menu
     vSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 60, 'Value', 30, 'Position', [50 40 150 20]);
@@ -42,9 +42,11 @@ function cannon_sim
 
     spaceMenu = uicontrol('Style', 'popupmenu', 'String', {'Vacuum', 'Earth (realistic)'}, 'Position', [600 70 100 20]);
 
+    matMenu = uicontrol('Style', 'popupmenu', 'String', {'Steel', 'Rubber', 'Wood'}, 'Position', [600 40 100 20]);
+
     uicontrol('Style', 'pushbutton', 'String', 'Fire!', 'Position', [450 40 100 30], 'Callback', @(src,evt) fireCannon(ax, ballPlot, vSlider, angleSlider, spaceMenu, matMenu, materials, matNames));
 
-    matMenu = uicontrol('Style', 'popupmenu', 'String', {'Steel', 'Rubber', 'Wood'}, 'Position', [600 40 100 20]);
+    
 
     
 
@@ -90,7 +92,7 @@ function cannon_sim
             while true
                 
                 
-                [x, y, vx, vy, bounced] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass)
+                [x, y, vx, vy, bounced] = step_physics(x, y, vx, vy, dt, g, space, Cd, mass, restitution)
 
                 set(ballPlot, 'XData', x, 'YData', y);
                 
