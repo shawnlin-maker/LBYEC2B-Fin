@@ -21,7 +21,7 @@ function cannon_sim
     statsText = text(ax, 140, 95, sprintf('Vx: 0.00 m/s\nVy: 0.00 m/s'), 'FontSize', 10, 'FontWeight', 'bold', 'Color', [0.1 0.1 0.3], 'BackgroundColor', [1 1 1], 'EdgeColor', [0.2 0.2 0.2], 'Margin', 6);
 
     %% live slider readout box; speed/angle, updates as sliders move
-    sliderText = text(ax, 5, 95, sprintf('Speed: 30.0 m/s\nAngle: 45.0 deg'), 'FontSize', 10, 'FontWeight', 'bold', 'Color', [0.1 0.1 0.3], 'BackgroundColor', [1 1 1], 'EdgeColor', [0.2 0.2 0.2], 'Margin', 6);
+    sliderText = text(ax, 5, 95, sprintf('Speed: 20.0 m/s\nAngle: 45.0 deg'), 'FontSize', 10, 'FontWeight', 'bold', 'Color', [0.1 0.1 0.3], 'BackgroundColor', [1 1 1], 'EdgeColor', [0.2 0.2 0.2], 'Margin', 6);
 
     %% path arrow
     frameCount = 0;
@@ -37,7 +37,7 @@ function cannon_sim
 
     %% sliders/menu
     vSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 40, 'Value', 20, 'Position', [50 40 150 20]);
-    
+
     angleSlider = uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 90, 'Value', 45, 'Position', [250 40 150 20]);
 
     %% slider labels
