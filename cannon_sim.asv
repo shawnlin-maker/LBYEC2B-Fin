@@ -74,12 +74,13 @@ function cannon_sim
         g = 9.81;
         dt = 0.02;
 
+        %% ball spawns at the barrel tip, not (0,0) -- same math as the barrel line
         x = pivot(1) + cannonLen*cosd(angle);
         y = pivot(2) + cannonLen*sind(angle);
         vx = v0 .* cosd(angle);
         vy = v0 .* sind(angle);
 
-        %% read dropdowns at fire time
+        %% read the dropdowns AT FIRE TIME, not before
         space = get(spaceMenu, 'Value');
         matChoice = get(matMenu, 'Value');
         chosenMat = materials.(matNames{matChoice});
@@ -88,7 +89,7 @@ function cannon_sim
         restitution = chosenMat.restitution;
         matColor = chosenMat.color;
 
-        %% trail every shot
+        %% new trail every shot, colored per material -- fixes old trail turning into a straight line
         tracerPlot = animatedline(ax, 'Color', matColor, 'LineWidth', 2);
         set(ballPlot, 'MarkerFaceColor', matColor);
 
@@ -105,7 +106,7 @@ function cannon_sim
 
             live_display(vx, vy, statsText)
 
-            %% squash feedback on bounce frames
+            %% squash-lite feedback on bounce frames
             if bounced
                 set(ballPlot, 'MarkerSize', 7);
                 drawnow;
@@ -118,7 +119,7 @@ function cannon_sim
 
             drawnow;
 
-            %% stop conditions; either flies off the right edge, or stops bouncing
+            %% stop conditions -- either flies off the right edge, or basically stopped bouncing
             if x > 195
                 break
             end
